@@ -2,6 +2,7 @@
 const COLS = 10;
 const ROWS = 10;
 const PX = 40;
+const COLORS = ["rainbow", "blue", "green", "red", "darkblue"];
 
 let gameRunning = true;
 let bombs = [];
@@ -131,6 +132,7 @@ function calcValues(valued) {
         } else {
           valueDiv.innerHTML = parseInt(valueDiv.innerHTML) + 1;
         }
+        valueDiv.style.color = COLORS[valueDiv.innerHTML];
       }
     }
   });
