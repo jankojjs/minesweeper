@@ -45,3 +45,8 @@
 .floater-left {
   left: 20px;
 }
+
+.floater-mid {
+  right: 48.5%;
+  cursor: pointer;
+}

@@ -135,6 +135,7 @@ let unrevealeds = Array.from(document.querySelectorAll(".unrevealed"));
 unrevealeds.forEach((item) => {
   item.addEventListener("click", function () {
     reveal(item);
+    changeSmileyOnClick();
     // Game over action
     item.innerHTML === "💣" && gameRunning && endScreen("Game Over");
   });
@@ -186,14 +187,24 @@ function endScreen(screenMsg) {
 
 // Add bomb counter, decrease on flag set, increase on flag remove, add max flags
 // add counter
-// add new game smiley
+// add new game smiley 😃😜
 
-function addFloaters() {
-  const bombCounterDiv = document.createElement("div");
-  bombCounterDiv.setAttribute("id", "bombCounterDiv");
-  bombCounterDiv.classList.add("floater");
-  bombCounterDiv.innerHTML = bombs.length;
-  board.appendChild(bombCounterDiv);
+const bombCounterDiv = document.createElement("div");
+bombCounterDiv.classList.add("floater");
+bombCounterDiv.innerHTML = bombs.length;
+board.appendChild(bombCounterDiv);
+
+const refreshIconDiv = document.createElement("div");
+refreshIconDiv.classList.add("floater", "floater-mid");
+refreshIconDiv.innerHTML = "😃";
+board.appendChild(refreshIconDiv);
+refreshIconDiv.addEventListener("click", () => {
+  window.top.location.reload(true);
+});
+
+function changeSmileyOnClick() {
+  refreshIconDiv.innerHTML = "😜";
+  setTimeout(function () {
+    refreshIconDiv.innerHTML = "😃";
+  }, 300);
 }
-
-addFloaters();
