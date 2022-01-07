@@ -43,18 +43,15 @@ for (let i = 0; i < ROWS; i++) {
     let field = document.createElement("div");
 
     // Style field
-    field.classList.add("field");
-    field.classList.add("unrevealed");
+    field.classList.add("field", "unrevealed");
 
     field.setAttribute("id", fieldId);
     if (isBomb) {
       field.innerHTML = "💣";
     } else {
-      if (fieldValue === 0) {
-        field.innerHTML = "";
-      } else {
-        field.innerHTML = fieldValue;
-      }
+      fieldValue === 0
+        ? (field.innerHTML = "")
+        : (field.innerHTML = fieldValue);
     }
 
     // Flag logic
@@ -62,20 +59,18 @@ for (let i = 0; i < ROWS; i++) {
       "contextmenu",
       function (ev) {
         ev.preventDefault();
-        if (field.classList.contains("unrevealed")) {
-          if (flagged.length < bombs.length) {
-            if (field.classList.contains("flagged") === false) {
-              field.classList.add("flagged");
-              flagged.push(field.getAttribute("id"));
-              if (winCheck() === true) {
-                alert("You Win!");
-                endScreen();
-              }
-            } else {
-              let classIndex = flagged.indexOf(field.getAttribute("id"));
-              flagged.splice(classIndex, 1);
-              field.classList.remove("flagged");
-            }
+        if (
+          field.classList.contains("unrevealed") &&
+          flagged.length < bombs.length
+        ) {
+          if (field.classList.contains("flagged") === false) {
+            field.classList.add("flagged");
+            flagged.push(field.getAttribute("id"));
+            winCheck() && endScreen("You Win!");
+          } else {
+            let classIndex = flagged.indexOf(field.getAttribute("id"));
+            flagged.splice(classIndex, 1);
+            field.classList.remove("flagged");
           }
         }
         return false;
@@ -114,8 +109,7 @@ function getNeighbours(fieldId) {
 }
 
 bombs.forEach((bomb) => {
-  let neightBor = getNeighbours(bomb);
-  neightBor.forEach((item) => {
+  getNeighbours(bomb).forEach((item) => {
     valued.push(item);
   });
 });
@@ -125,15 +119,13 @@ calcValues(valued);
 function calcValues(valued) {
   valued.map((valueItem) => {
     let valueDiv = document.querySelector("#" + valueItem);
-    if (valueDiv) {
-      if (valueDiv.innerHTML !== "💣") {
-        if (valueDiv.innerHTML === "") {
-          valueDiv.innerHTML = 1;
-        } else {
-          valueDiv.innerHTML = parseInt(valueDiv.innerHTML) + 1;
-        }
-        valueDiv.style.color = COLORS[valueDiv.innerHTML];
+    if (valueDiv && valueDiv.innerHTML !== "💣") {
+      if (valueDiv.innerHTML === "") {
+        valueDiv.innerHTML = 1;
+      } else {
+        valueDiv.innerHTML = parseInt(valueDiv.innerHTML) + 1;
       }
+      valueDiv.style.color = COLORS[valueDiv.innerHTML];
     }
   });
 }
@@ -143,10 +135,7 @@ unrevealeds.forEach((item) => {
   item.addEventListener("click", function () {
     reveal(item);
     // Game over action
-    if (item.innerHTML === "💣" && gameRunning) {
-      endScreen();
-      alert("game over");
-    }
+    item.innerHTML === "💣" && gameRunning && endScreen("Game Over");
   });
 });
 
@@ -178,15 +167,14 @@ function winCheck() {
   if (bombs.length === flagged.length) {
     let conditionMet = 0;
     for (let k = 0; k < bombs.length; k++) {
-      if (bombs.includes(flagged[k])) {
-        conditionMet = conditionMet + 1;
-      }
+      bombs.includes(flagged[k]) && (conditionMet = conditionMet + 1);
     }
     return conditionMet === bombs.length;
   }
 }
 
-function endScreen() {
+function endScreen(screenMsg) {
+  alert(screenMsg);
   let unrevealeds = Array.from(document.querySelectorAll(".unrevealed"));
   unrevealeds.map((item) => {
     item.classList.remove("unrevealed");
