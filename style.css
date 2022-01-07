@@ -34,3 +34,14 @@
   background-position: center;
   background-repeat: no-repeat;
 }
+
+.floater {
+  position: absolute;
+  top: 20px;
+  color: red;
+  font-size: 32px;
+}
+
+.floater-left {
+  left: 20px;
+}

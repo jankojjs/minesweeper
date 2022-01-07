@@ -59,17 +59,18 @@ for (let i = 0; i < ROWS; i++) {
       "contextmenu",
       function (ev) {
         ev.preventDefault();
-        if (
-          field.classList.contains("unrevealed") &&
-          flagged.length < bombs.length
-        ) {
+        if (field.classList.contains("unrevealed")) {
           if (field.classList.contains("flagged") === false) {
-            field.classList.add("flagged");
-            flagged.push(field.getAttribute("id"));
-            winCheck() && endScreen("You Win!");
+            if (flagged.length < bombs.length) {
+              field.classList.add("flagged");
+              flagged.push(field.getAttribute("id"));
+              bombCounterDiv.innerHTML = parseInt(bombCounterDiv.innerHTML) - 1;
+              winCheck() && endScreen("You Win!");
+            }
           } else {
             let classIndex = flagged.indexOf(field.getAttribute("id"));
             flagged.splice(classIndex, 1);
+            bombCounterDiv.innerHTML = parseInt(bombCounterDiv.innerHTML) + 1;
             field.classList.remove("flagged");
           }
         }
@@ -145,6 +146,7 @@ function reveal(key) {
     if (flagged.includes(key.getAttribute("id"))) {
       var classIndex2 = flagged.indexOf(key.getAttribute("id"));
       flagged.splice(classIndex2, 1);
+      bombCounterDiv.innerHTML = parseInt(bombCounterDiv.innerHTML) + 1;
       key.classList.remove("flagged");
     }
     if (!revealed.includes(key.getAttribute("id"))) {
@@ -181,3 +183,17 @@ function endScreen(screenMsg) {
   });
   gameRunning = false;
 }
+
+// Add bomb counter, decrease on flag set, increase on flag remove, add max flags
+// add counter
+// add new game smiley
+
+function addFloaters() {
+  const bombCounterDiv = document.createElement("div");
+  bombCounterDiv.setAttribute("id", "bombCounterDiv");
+  bombCounterDiv.classList.add("floater");
+  bombCounterDiv.innerHTML = bombs.length;
+  board.appendChild(bombCounterDiv);
+}
+
+addFloaters();
