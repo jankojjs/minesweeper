@@ -5,6 +5,8 @@ const PX = 40;
 const COLORS = ["rainbow", "blue", "green", "red", "darkblue"];
 
 let gameRunning = true;
+let firstClick = true;
+let second = 0;
 let bombs = [];
 let flagged = [];
 let revealed = [];
@@ -185,22 +187,27 @@ function endScreen(screenMsg) {
   gameRunning = false;
 }
 
-// Add bomb counter, decrease on flag set, increase on flag remove, add max flags
-// add counter
-// add new game smiley 😃😜
+const topWrapper = document.createElement("div");
+topWrapper.classList.add("floater-wrapper");
+board.appendChild(topWrapper);
 
 const bombCounterDiv = document.createElement("div");
 bombCounterDiv.classList.add("floater");
 bombCounterDiv.innerHTML = bombs.length;
-board.appendChild(bombCounterDiv);
+topWrapper.appendChild(bombCounterDiv);
 
 const refreshIconDiv = document.createElement("div");
-refreshIconDiv.classList.add("floater", "floater-mid");
+refreshIconDiv.classList.add("floater-mid");
 refreshIconDiv.innerHTML = "😃";
-board.appendChild(refreshIconDiv);
+topWrapper.appendChild(refreshIconDiv);
 refreshIconDiv.addEventListener("click", () => {
   window.top.location.reload(true);
 });
+
+const timerDiv = document.createElement("div");
+timerDiv.classList.add("floater-right");
+timerDiv.innerHTML = 999;
+topWrapper.appendChild(timerDiv);
 
 function changeSmileyOnClick() {
   refreshIconDiv.innerHTML = "😜";
@@ -208,3 +215,25 @@ function changeSmileyOnClick() {
     refreshIconDiv.innerHTML = "😃";
   }, 300);
 }
+
+function timer() {
+  timerDiv.innerHTML = parseInt(timerDiv.innerHTML) + 1;
+  if (parseInt(timerDiv.innerHTML) < 10) {
+    timerDiv.innerHTML = "00" + timerDiv.innerHTML;
+    return;
+  }
+  if (parseInt(timerDiv.innerHTML) < 100) {
+    timerDiv.innerHTML = "0" + timerDiv.innerHTML;
+    return;
+  }
+}
+
+canvas.addEventListener("click", () => {
+  if (firstClick) {
+    timerDiv.innerHTML = "000";
+    setInterval(function () {
+      firstClick = false;
+      gameRunning && timer();
+    }, 1000);
+  }
+});

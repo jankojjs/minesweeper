@@ -35,18 +35,20 @@
   background-repeat: no-repeat;
 }
 
-.floater {
+.floater-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   position: absolute;
   top: 20px;
   color: red;
   font-size: 32px;
+  width: 420px;
 }
 
-.floater-left {
-  left: 20px;
+.floater-right {
+  text-align: right;
 }
 
 .floater-mid {
-  right: 48.5%;
-  cursor: pointer;
+  text-align: center;
 }
